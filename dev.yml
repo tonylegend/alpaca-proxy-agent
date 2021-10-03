@@ -10,3 +10,5 @@ services:
     command: python main.py
     ports:
       - "8765:8765"
+    environment:
+      - IS_PRO=True
