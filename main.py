@@ -53,21 +53,31 @@ def consumer_thread(channels):
 
 def subscribe(channels):
     logging.info(f"Subscribing to: {channels}")
-    conn.subscribe_trades(on_message, *channels['trades'])
-    conn.subscribe_quotes(on_message, *channels['quotes'])
-    conn.subscribe_bars(on_message, *channels['bars'])
-    conn.subscribe_statuses(on_message, *channels['statuses'])
-    conn.subscribe_daily_bars(on_message, *channels['dailyBars'])
+    if 'trades' in channels:
+        conn.subscribe_trades(on_message, *channels['trades'])
+    if 'quotes' in channels:
+        conn.subscribe_quotes(on_message, *channels['quotes'])
+    if 'bars' in channels:
+        conn.subscribe_bars(on_message, *channels['bars'])
+    if 'statuses' in channels:
+        conn.subscribe_statuses(on_message, *channels['statuses'])
+    if 'dailyBars' in channels:
+        conn.subscribe_daily_bars(on_message, *channels['dailyBars'])
 
 
 def unsubscribe(channels):
     logging.info(f"Unsubscribing from: {channels}")
     try:
-        conn.unsubscribe_trades(*channels['trades'])
-        conn.unsubscribe_quotes(*channels['quotes'])
-        conn.unsubscribe_bars(*channels['bars'])
-        conn.unsubscribe_statuses(*channels['statuses'])
-        conn.unsubscribe_daily_bars(*channels['dailyBars'])
+        if 'trades' in channels:
+            conn.unsubscribe_trades(*channels['trades'])
+        if 'quotes' in channels:
+            conn.unsubscribe_quotes(*channels['quotes'])
+        if 'bars' in channels:
+            conn.unsubscribe_bars(*channels['bars'])
+        if 'statuses' in channels:
+            conn.unsubscribe_statuses(*channels['statuses'])
+        if 'dailyBars' in channels:
+            conn.unsubscribe_daily_bars(*channels['dailyBars'])
     except Exception as e:
         logging.warning(f"error unsubscribing from {channels}. {e}")
 
@@ -99,7 +109,7 @@ async def serve(sub, path):
             # msg = await sub.recv()
             try:
                 data = msgpack.unpackb(msg)
-                # print(f"< {data}")
+                print(f"< {data}")
             except Exception as e:
                 print(e)
 
@@ -125,6 +135,8 @@ async def serve(sub, path):
                     raise Exception("Got here")
 
                 previous_channels = get_current_channels()
+                print(f"previous channels: {previous_channels}")
+                print(f"new channels: {new_channels}")
                 if previous_channels:
                     # it is easier to first unsubscribe from previous channels
                     # and then subscribe again. this way we make sure we clean
