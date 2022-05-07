@@ -1,6 +1,6 @@
 aiohttp==3.8.1
 requests==2.26.0
-alpaca-trade-api==2.0.0
+alpaca-trade-api==2.1.0
 asyncio-nats-client==0.10.0
 msgpack==1.0.3
 numpy==1.22.1
