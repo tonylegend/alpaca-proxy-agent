@@ -2,12 +2,15 @@ version: '3'
 
 services:
   alpaca-proxy:
+    container_name: alpaca-proxy-agent-container
+    image: "alpaca-proxy-agent_alpaca_proxy"
     build:
       context: ./
       dockerfile: ./Dockerfile-dev
     volumes:
     - ./:/opt/project
     command: python main.py
+    restart: always
     ports:
       - "8765:8765"
     environment:
