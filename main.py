@@ -156,8 +156,8 @@ async def serve(sub, path):
                         channels = get_current_channels()
                         subscribe(channels)
     except Exception as e:
-        # traceback.print_exc()
-        print(e)
+        traceback.print_exc()
+        # print(e)
         # we clean up subscriptions upon disconnection and subscribe again
         # for still active clients
         current = get_current_channels()
